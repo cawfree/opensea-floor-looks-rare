@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "build": "rm -rf node_modules dist; yarn && tsc",
     "test": "node_modules/.bin/ts-node src"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "chalk": "4.1.2",
     "console-table-printer": "^2.10.0",
     "puppeteer": "^13.0.0",
-    "puppeteer-autoscroll-down": "^1.0.0"
+    "puppeteer-autoscroll-down": "^1.0.0",
+    "puppeteer-core": "^13.0.0"
   }
 }

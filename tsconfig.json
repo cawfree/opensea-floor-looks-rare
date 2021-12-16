@@ -8,6 +8,7 @@
     "removeComments": true,
     "experimentalDecorators": true,
     "rootDir": "src",
+    "outDir": "dist",
     "sourceMap": true,
     "noEmitOnError": true
   }

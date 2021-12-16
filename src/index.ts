@@ -1,6 +1,9 @@
+#!/usr/bin/env node
+
 import axios from 'axios';
 import chalk from 'chalk';
 import puppeteer from 'puppeteer';
+import puppeteerCore from 'puppeteer-core';
 import {scrollPageToBottom} from 'puppeteer-autoscroll-down';
 import {printTable} from 'console-table-printer';
 
@@ -41,7 +44,7 @@ void (async () => {
   const namesToPrices = {} as Record<string, string>;
 
   for (let i = 0; i < stepsLimit; i += 1) {
-    await scrollPageToBottom(page, {
+    await scrollPageToBottom(page as unknown as puppeteerCore.Page, {
       size: 500,
       delay: 240,
       stepsLimit: 1,
