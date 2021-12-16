@@ -1,6 +1,6 @@
 # opensea-floor-looks-rare
 
-## 📚 How it works
+## 📚 How it works!
 
 This project depends on [__Puppeteer__](https://github.com/puppeteer/puppeteer) to programmatically scrape [__OpenSea__](https://opensea.io/) and [__rarity.tools__](https://rarity.tools/) for data, since it's not directly available using an API.
 
@@ -8,7 +8,7 @@ This project depends on [__Puppeteer__](https://github.com/puppeteer/puppeteer) 
 
 This means you'll need to have a [__Chromium Browser__](https://www.chromium.org/) installed and `opensea-floor-looks-rare` will try to programmatically automate a browser window. It'll _look_ scary, but it isn't.
 
-## 🚀 Usage
+## 🚀 Usage!
 
 To invoke, use `npx opensea-floor-looks-rare`:
 
@@ -20,5 +20,5 @@ You may specify a `collection_slug` to control which collection of NFTs to searc
 
 With no parameters specified, it'll default to `--collection_slug=boredapeyachtclub --number_of_steps=15`.
 
-## ✌️ License
+## ✌️ License!
 [__MIT__](./LICENSE.md)
