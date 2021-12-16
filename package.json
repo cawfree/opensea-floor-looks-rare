@@ -1,0 +1,25 @@
+{
+  "name": "opensea-floor-looks-rare",
+  "version": "0.1.0",
+  "description": "🧸 💸 Determine the rarity of floor NFTs on OpenSea.",
+  "main": "dist",
+  "repository": "https://github.com/cawfree/opensea-floor-looks-rare",
+  "author": "Alex Thomas (@cawfree) <hello@cawfree.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "node_modules/.bin/ts-node src"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^5.4.4",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "chalk": "4.1.2",
+    "console-table-printer": "^2.10.0",
+    "puppeteer": "^13.0.0",
+    "puppeteer-autoscroll-down": "^1.0.0"
+  }
+}
