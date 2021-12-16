@@ -18,6 +18,9 @@
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   },
+  "bin": {
+    "opensea-floor-looks-rare": "dist/index.js"
+  },
   "dependencies": {
     "axios": "^0.24.0",
     "chalk": "4.1.2",
