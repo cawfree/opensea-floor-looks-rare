@@ -20,7 +20,7 @@ You may specify a `collection_slug` to control which collection of NFTs to searc
 
 With no parameters specified, it'll default to `--collection_slug=boredapeyachtclub --number_of_steps=15`.
 
-Once finished, it'll print a table of the calculated rarities:
+Once finished, it'll print a table of the calculated rarities. You'll be surprised by the variation!
 
 ```
 ┌──────────┬────────┬──────────────────────────┐
