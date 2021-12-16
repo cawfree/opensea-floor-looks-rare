@@ -83,15 +83,15 @@ void (async () => {
   console.clear();
   console.log();
   console.log();
-  console.log(`🛳️  OpenSea floor rarity for ${chalk.bold(collection_slug)}:`);
+  console.log(`🛳️  OpenSea floor rarity for ${chalk.green(chalk.bold(collection_slug))}:`);
   console.log();
   console.log();
 
   printTable(
     results.map(([id, price, rank]) => ({
-      'Token ID': `#${id}`,
+      'Token ID': chalk.bold`#${id}`,
       'Price': `${price.trim()}Ξ`,
-      'Ranking on Rarity Tools': colorForRank(rank)(rank),
+      'Ranking on rarity.tools™': colorForRank(rank)(rank),
     })),
   );
 
