@@ -20,5 +20,20 @@ You may specify a `collection_slug` to control which collection of NFTs to searc
 
 With no parameters specified, it'll default to `--collection_slug=boredapeyachtclub --number_of_steps=15`.
 
+Once finished, it'll print a table of the calculated rarities:
+
+```
+┌──────────┬────────┬──────────────────────────┐
+│ Token ID │  Price │ Ranking on rarity.tools™ │
+├──────────┼────────┼──────────────────────────┤
+│    #1413 │ 48.84Ξ │                    #6607 │
+│    #1715 │  52.4Ξ │                    #9695 │
+│    #3003 │    53Ξ │                    #7571 │
+│    #3041 │ 50.53Ξ │                    #8938 │
+│    #3583 │    51Ξ │                    #9705 │
+│    #4093 │  52.5Ξ │                    #6985 │
+└──────────┴────────┴──────────────────────────┘
+```
+
 ## ✌️ License!
 [__MIT__](./LICENSE.md)
