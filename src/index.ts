@@ -10,13 +10,15 @@ import yargs from 'yargs/yargs';
 
 const {
   collection_slug: maybeCollectionSlug,
+  number_of_steps: maybeNumberOfSteps,
 } = yargs(process.argv).argv as {
   readonly collection_slug?: string;
+  readonly number_of_steps?: string;
 };
 
 // Assume one-to-one with OpenSea?
 const collection_slug = maybeCollectionSlug || 'boredapeyachtclub';
-const stepsLimit = 5;
+const number_of_steps = maybeNumberOfSteps || 15;
 
 const collect = ({page, x}: {
   readonly page: puppeteer.Page;
@@ -49,7 +51,7 @@ void (async () => {
 
   const namesToPrices = {} as Record<string, string>;
 
-  for (let i = 0; i < stepsLimit; i += 1) {
+  for (let i = 0; i < number_of_steps; i += 1) {
     await scrollPageToBottom(page as unknown as puppeteerCore.Page, {
       size: 500,
       delay: 240,

@@ -9,7 +9,7 @@
   "private": false,
   "scripts": {
     "build": "rm -rf node_modules dist; yarn && tsc && chmod +x dist/index.js",
-    "test": "node_modules/.bin/ts-node src --collection_slug=rumble-kong-league"
+    "test": "node_modules/.bin/ts-node src"
   },
   "devDependencies": {
     "@types/node": "^17.0.0",
