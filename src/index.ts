@@ -6,11 +6,17 @@ import puppeteer from 'puppeteer';
 import puppeteerCore from 'puppeteer-core';
 import {scrollPageToBottom} from 'puppeteer-autoscroll-down';
 import {printTable} from 'console-table-printer';
+import yargs from 'yargs/yargs';
 
+const {
+  collection_slug: maybeCollectionSlug,
+} = yargs(process.argv).argv as {
+  readonly collection_slug?: string;
+};
 
 // Assume one-to-one with OpenSea?
-const collection_slug = 'boredapeyachtclub';
-const stepsLimit = 15;
+const collection_slug = maybeCollectionSlug || 'boredapeyachtclub';
+const stepsLimit = 5;
 
 const collect = ({page, x}: {
   readonly page: puppeteer.Page;
@@ -54,7 +60,8 @@ void (async () => {
       names,
       prices,
     ] = await Promise.all([
-      collect({page, x: "//div[contains(@class, 'AssetCardFooter--name')]"}),
+      collect({page, x: "//div[contains(@class, 'AssetCardFooter--name')]"})
+        .then(arr => arr.map(e => e.replace(/\D/g, ""))),
       collect({page, x: "//div[contains(@class, 'AssetCardFooter--price')]"})
         .then(arr => arr.filter((_, i) => i % 2 === 1)),
     ]);

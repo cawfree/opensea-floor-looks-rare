@@ -9,11 +9,12 @@
   "private": false,
   "scripts": {
     "build": "rm -rf node_modules dist; yarn && tsc && chmod +x dist/index.js",
-    "test": "node_modules/.bin/ts-node src"
+    "test": "node_modules/.bin/ts-node src --collection_slug=rumble-kong-league"
   },
   "devDependencies": {
     "@types/node": "^17.0.0",
     "@types/puppeteer": "^5.4.4",
+    "@types/yargs": "^17.0.7",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   },
@@ -23,6 +24,7 @@
     "console-table-printer": "^2.10.0",
     "puppeteer": "^13.0.0",
     "puppeteer-autoscroll-down": "^1.0.0",
-    "puppeteer-core": "^13.0.0"
+    "puppeteer-core": "^13.0.0",
+    "yargs": "^17.3.0"
   }
 }
