@@ -6,7 +6,7 @@ This project depends on [__Puppeteer__](https://github.com/puppeteer/puppeteer) 
 
 `opensea-floor-looks-rare` browses a specified NFT collection on OpenSea (ordered by `BUY_NOW`, `PRICE_ASCENDING`, i.e. sorts by the cheapest available to purchase), and parses the webpage for the currently available floor prices. Once collected, it combines the collected information with rarity data sourced by rarity tools.
 
-This means you'll need to have a [__Chromium Browser__](https://www.chromium.org/) installed and `opensea-floor-looks-rare` will try to programmatically automate a browser window. It'll _look_ scary, but it isn't (you can `yarn build` the repo if you wish to be cautious).
+This means you'll need to have a [__Chromium Browser__](https://www.chromium.org/) installed and `opensea-floor-looks-rare` will try to programmatically automate a browser window. It'll _look_ scary, but it isn't (you can always `yarn build` the repo if you wish to be cautious).
 
 ## 🚀 Usage!
 
