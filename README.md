@@ -1,6 +1,6 @@
 # opensea-floor-looks-rare
 
-## 📚 How it works!
+## 📚 How it works! [(video)](https://twitter.com/cawfree/status/1471599400187273223)
 
 This project depends on [__Puppeteer__](https://github.com/puppeteer/puppeteer) to programmatically scrape [__OpenSea__](https://opensea.io/) and [__rarity.tools__](https://rarity.tools/) for data, since it's not directly available using an API.
 
