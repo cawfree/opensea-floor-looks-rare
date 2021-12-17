@@ -18,7 +18,7 @@ const {
 
 // Assume one-to-one with OpenSea?
 const collection_slug = maybeCollectionSlug || 'boredapeyachtclub';
-const number_of_steps = maybeNumberOfSteps || 15;
+const number_of_steps = maybeNumberOfSteps || 8;
 
 const collect = ({page, x}: {
   readonly page: puppeteer.Page;
@@ -49,7 +49,7 @@ void (async () => {
     `https://opensea.io/collection/${collection_slug}?search[sortAscending]=true&search[sortBy]=PRICE&search[toggles][0]=BUY_NOW`
   );
 
-  const namesToPrices = {} as Record<string, string>;
+  const idsToPrices = {} as Record<string, string>;
 
   for (let i = 0; i < number_of_steps; i += 1) {
     await scrollPageToBottom(page as unknown as puppeteerCore.Page, {
@@ -57,25 +57,25 @@ void (async () => {
       delay: 240,
       stepsLimit: 1,
     });
-    const [
-      // HACK: Assume names map to identifiers. This isn't always true!
-      names,
-      prices,
-    ] = await Promise.all([
-      collect({page, x: "//div[contains(@class, 'AssetCardFooter--name')]"})
-        .then(arr => arr.map(e => e.replace(/\D/g, ""))),
+    const [ids, prices] = await Promise.all([
+      page.$x("//a[contains(@class, 'Asset--anchor')]")
+        .then(els => Promise.all(
+          els.map(el => page.evaluate(el => el.href, el)),
+        ))
+        .then(arr => arr.map(e => e.substring(e.lastIndexOf('/') + 1))),
       collect({page, x: "//div[contains(@class, 'AssetCardFooter--price')]"})
         .then(arr => arr.filter((_, i) => i % 2 === 1)),
     ]);
-    for (let j = 0; j < names.length; j += 1) {
-      const name = names[j];
-      namesToPrices[name] = prices[j];
+
+    for (let j = 0; j < ids.length; j += 1) {
+      const id = ids[j];
+      idsToPrices[id] = prices[j];
     }
   }
 
   // Next, determine their rarity.
   const results = await Promise.all(
-    Object.entries(namesToPrices)
+    Object.entries(idsToPrices)
       .map(async ([k, v]) => {
         const page = await browser.newPage();
         await page.goto(`https://rarity.tools/${collection_slug}/view/${k}`);
