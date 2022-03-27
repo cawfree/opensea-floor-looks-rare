@@ -1,6 +1,6 @@
 {
   "name": "opensea-floor-looks-rare",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "🧸 💸 Determine the rarity of floor NFTs on OpenSea.",
   "main": "dist",
   "repository": "https://github.com/cawfree/opensea-floor-looks-rare",
