@@ -1,18 +1,20 @@
 #!/usr/bin/env node
 
-import axios from 'axios';
 import chalk from 'chalk';
-import puppeteer from 'puppeteer';
 import puppeteerCore from 'puppeteer-core';
+import puppeteer from 'puppeteer-extra';
+import stealth from 'puppeteer-extra-plugin-stealth';
 import {scrollPageToBottom} from 'puppeteer-autoscroll-down';
 import {printTable} from 'console-table-printer';
 import yargs from 'yargs/yargs';
 
 const {
+  executable_path = '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome',
   collection_slug: maybeCollectionSlug,
   number_of_steps: maybeNumberOfSteps,
   reference_collection_slug: maybeReferenceCollectionSlug,
 } = yargs(process.argv).argv as {
+  readonly executable_path?: string;
   readonly collection_slug?: string;
   readonly number_of_steps?: string;
   readonly reference_collection_slug?: string;
@@ -24,7 +26,7 @@ const number_of_steps = maybeNumberOfSteps || 8;
 const reference_collection_slug = maybeReferenceCollectionSlug || collection_slug;
 
 const collect = ({page, x}: {
-  readonly page: puppeteer.Page;
+  readonly page: puppeteerCore.Page;
   readonly x: string;
 }) => {
   return page.$x(x)
@@ -43,9 +45,25 @@ const colorForRank = (rank: string) => {
   return chalk.white;
 };
 
+// https://stackoverflow.com/a/60779547
+function toChunkedArray<T>(
+  arr: readonly T[],
+  chunkSize: number
+) {
+  return arr.reduce((acc, _, i) => {
+    i % chunkSize === 0 && acc.push(arr.slice(i, i + chunkSize));
+    return acc;
+  }, [] as T[][]);
+}
+
 void (async () => {
 
-  const browser = await puppeteer.launch({headless: false});
+  puppeteer.use(stealth());
+
+  const browser = await puppeteer.launch({
+    executablePath: executable_path,
+    headless: true,
+  });
   const page = await browser.newPage();
 
   await page.goto(
@@ -66,7 +84,10 @@ void (async () => {
           els.map(el => page.evaluate(el => el.href, el)),
         ))
         .then(arr => arr.map(e => e.substring(e.lastIndexOf('/') + 1))),
-      collect({page, x: "//div[contains(@class, 'AssetCardFooter--price')]"})
+      collect({
+        page: page as unknown as puppeteerCore.Page,
+        x: "//div[contains(@class, 'AssetCardFooter--price')]",
+      })
         .then(arr => arr.filter((_, i) => i % 2 === 1)),
     ]);
 
@@ -76,50 +97,71 @@ void (async () => {
     }
   }
 
-  // Next, determine their rarity.
-  const results = await Promise.all(
-    Object.entries(idsToPrices)
-      .map(async ([k, v]) => {
+  const chunkedIdsToPrices = toChunkedArray(
+    Object.entries(idsToPrices).filter(([k]) => k.length),
+    12
+  );
+
+  const results = [];
+
+  for (let i = 0; i < chunkedIdsToPrices.length; i += 1) {
+    const chunked = chunkedIdsToPrices[i];
+    const nextResults = (await Promise.all(
+      chunked.map(async ([k, price]) => {
         const page = await browser.newPage();
         await page.goto(`https://rarity.tools/${reference_collection_slug}/view/${k}`);
-        const x = "//span[contains(@class, 'font-bold whitespace-nowrap')]";
         try {
+          const x = "//span[contains(@class, 'font-bold whitespace-nowrap')]";
           await page.waitForXPath(x);
-          const [res] = await collect({page, x});
+          const [res] = await collect({
+            page: page as unknown as puppeteerCore.Page,
+            x,
+          });
+          await page.close();
           if (res) {
             const rank = res.substring('Rarity Rank: '.length);
-            return [k, v, rank];
+            console.error(chalk.green`Succeeded in determining rarity for ${k}. (${rank} at ${price.trim()}Ξ)`);
+            return [k, price, rank];
           }
         } catch (e) {
+          await page.close();
           console.error(chalk.red`Failed to determine rarity for ${k}.`);
         }
         return null;
-      })
-      .filter(Boolean),
-  );
+      }),
+    ))
+    .filter(Boolean);
+
+    for (const result of nextResults) {
+      results.push(result);
+    }
+  }
 
   await browser.close();
 
   console.clear();
   console.log();
   console.log();
-  console.log(`🛳️  OpenSea floor rarity for ${chalk.green(chalk.bold(collection_slug))}:`);
-  console.log();
-  console.log();
 
-  if (maybeReferenceCollectionSlug) {
-    console.log(chalk.yellow`Please note! Rarity values shown are for the reference collection "${maybeReferenceCollectionSlug}".`);
+  if (results.length) {
+    console.log(`🛳️  OpenSea floor rarity for ${chalk.green(chalk.bold(collection_slug))}:`);
     console.log();
     console.log();
+    if (maybeReferenceCollectionSlug) {
+      console.log(chalk.yellow`Please note! Rarity values shown are for the reference collection "${maybeReferenceCollectionSlug}".`);
+      console.log();
+      console.log();
+    }
+    printTable(
+      results.map(([id, price, rank]) => ({
+        'Token ID': chalk.bold`#${id}`,
+        'Price': `${price.trim()}Ξ`,
+        'Ranking on rarity.tools™': colorForRank(rank)(rank),
+      })),
+    );
+  } else {
+    console.log(chalk.red`No results found. You may want to increase --number_of_steps.`);
   }
-
-  printTable(
-    results.map(([id, price, rank]) => ({
-      'Token ID': chalk.bold`#${id}`,
-      'Price': `${price.trim()}Ξ`,
-      'Ranking on rarity.tools™': colorForRank(rank)(rank),
-    })),
-  );
 
   console.log();
   console.log();

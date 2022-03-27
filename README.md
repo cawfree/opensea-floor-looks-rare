@@ -6,14 +6,14 @@ This project depends on [__Puppeteer__](https://github.com/puppeteer/puppeteer) 
 
 `opensea-floor-looks-rare` browses a specified NFT collection on OpenSea (ordered by `BUY_NOW`, `PRICE_ASCENDING`, i.e. sorts by the cheapest available to purchase), and parses the webpage for the currently available floor prices. Once collected, it combines the collected information with rarity data sourced by rarity tools.
 
-This means you'll need to have a [__Chromium Browser__](https://www.chromium.org/) installed and `opensea-floor-looks-rare` will try to programmatically automate a browser window. It'll _look_ scary, but it isn't (you can always `yarn build` the repo if you wish to be cautious).
+This means you'll need to have a [__Chromium Browser__](https://www.chromium.org/) installed and `opensea-floor-looks-rare` will try to programmatically automate a browser window in the background.
 
 ## 🚀 Usage!
 
 To invoke, use `npx opensea-floor-looks-rare`:
 
 ```sh
-npx opensea-floor-looks-rare --collection_slug="rumble-kong-league" --number_of_steps=5
+npx opensea-floor-looks-rare executable_path="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome" --collection_slug="rumble-kong-league" --number_of_steps=5
 ```
 
 You may specify a `collection_slug` to control which collection of NFTs to search for, and a `number_of_steps` to roughly control how many NFTs on the OpenSea floor are processed.
@@ -35,10 +35,10 @@ Once finished, you'll be presented with a table of the calculated rarities. You'
 └──────────┴────────┴──────────────────────────┘
 ```
 
-You can also define a `--reference_collection_slug` if you wish to compare floor tokens of one collection using the rarity of another. This is useful for collections like [__World of Women Galaxy__](https://opensea.io/collection/world-of-women-galaxy), whose attributes are designed to roughly carry over from [__World of Women__](https://opensea.io/collection/world-of-women):
+You can also define a `--reference_collection_slug` if you wish to compare floor tokens of one collection using the rarity of another. This is useful for collections like [__World of Women Galaxy__](https://opensea.io/collection/world-of-women-galaxy), whose attributes in the initial 10,000 would carry over some attributes from [__World of Women__](https://opensea.io/collection/world-of-women):
 
 ```sh
-npx opensea-floor-looks-rare --collection_slug="world-of-women-galaxy" --reference_collection_slug="world-of-women" --number_of_steps=5
+npx opensea-floor-looks-rare --collection_slug="world-of-women-galaxy" --reference_collection_slug="world-of-women-nft" --number_of_steps=20
 ```
 
 ## ✌️ License!
