@@ -11,14 +11,17 @@ import yargs from 'yargs/yargs';
 const {
   collection_slug: maybeCollectionSlug,
   number_of_steps: maybeNumberOfSteps,
+  reference_collection_slug: maybeReferenceCollectionSlug,
 } = yargs(process.argv).argv as {
   readonly collection_slug?: string;
   readonly number_of_steps?: string;
+  readonly reference_collection_slug?: string;
 };
 
 // Assume one-to-one with OpenSea?
 const collection_slug = maybeCollectionSlug || 'boredapeyachtclub';
 const number_of_steps = maybeNumberOfSteps || 8;
+const reference_collection_slug = maybeReferenceCollectionSlug || collection_slug;
 
 const collect = ({page, x}: {
   readonly page: puppeteer.Page;
@@ -78,7 +81,7 @@ void (async () => {
     Object.entries(idsToPrices)
       .map(async ([k, v]) => {
         const page = await browser.newPage();
-        await page.goto(`https://rarity.tools/${collection_slug}/view/${k}`);
+        await page.goto(`https://rarity.tools/${reference_collection_slug}/view/${k}`);
         const x = "//span[contains(@class, 'font-bold whitespace-nowrap')]";
         await page.waitForXPath(x);
         const [res] = await collect({page, x});
@@ -98,6 +101,12 @@ void (async () => {
   console.log(`🛳️  OpenSea floor rarity for ${chalk.green(chalk.bold(collection_slug))}:`);
   console.log();
   console.log();
+
+  if (maybeReferenceCollectionSlug) {
+    console.log(chalk.yellow`Please note! Rarity values shown are for the reference collection "${maybeReferenceCollectionSlug}".`);
+    console.log();
+    console.log();
+  }
 
   printTable(
     results.map(([id, price, rank]) => ({
