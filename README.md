@@ -22,7 +22,11 @@ With no parameters specified, it'll default to `--collection_slug=boredapeyachtc
 
 Once finished, you'll be presented with a table of the calculated rarities. You'll be surprised by the variation!
 
-You can also define a `--reference_collection_slug` if you wish to compare floor tokens of one collection using the rarity of another. This is useful for collections like [World of Women Galaxy](https://opensea.io/collection/world-of-women-galaxy), whose attributes are designed to roughly carry over from [World of Women](https://opensea.io/collection/world-of-women).
+You can also define a `--reference_collection_slug` if you wish to compare floor tokens of one collection using the rarity of another. This is useful for collections like [__World of Women Galaxy__](https://opensea.io/collection/world-of-women-galaxy), whose attributes are designed to roughly carry over from [__World of Women__](https://opensea.io/collection/world-of-women):
+
+```sh
+npx opensea-floor-looks-rare --collection_slug="world-of-women-galaxy" --reference_collection_slug="world-of-women" --number_of_steps=5
+```
 
 ```
 ┌──────────┬────────┬──────────────────────────┐
