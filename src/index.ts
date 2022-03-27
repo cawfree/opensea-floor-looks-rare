@@ -79,17 +79,21 @@ void (async () => {
   // Next, determine their rarity.
   const results = await Promise.all(
     Object.entries(idsToPrices)
-      .map(async ([k, v]) => {
+      .flatMap(async ([k, v]) => {
         const page = await browser.newPage();
         await page.goto(`https://rarity.tools/${reference_collection_slug}/view/${k}`);
         const x = "//span[contains(@class, 'font-bold whitespace-nowrap')]";
-        await page.waitForXPath(x);
-        const [res] = await collect({page, x});
-        if (res) {
-          const rank = res.substring('Rarity Rank: '.length);
-          return [k, v, rank];
+        try {
+          await page.waitForXPath(x);
+          const [res] = await collect({page, x});
+          if (res) {
+            const rank = res.substring('Rarity Rank: '.length);
+            return [[k, v, rank]];
+          }
+        } catch (e) {
+          console.error(chalk.red`Failed to determine rarity for ${k}.`);
         }
-        return null;
+        return [];
       }),
   );
 
